@@ -6,7 +6,7 @@
 
 # Form
 
-Form component. Can be used to wrap Input, Select and DatePicker components.
+Form component. Can be used to wrap Input, Select and DatePicker components. Can simplify mass event handling for a set of components.
 
 ## Usage
 
