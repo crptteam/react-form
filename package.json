@@ -1,6 +1,6 @@
 {
   "name": "@crpt/react-form",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "react-form React component",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -18,7 +18,7 @@
     "build": "nwb build-react-component --copy-files",
     "clean": "nwb clean-module && nwb clean-demo",
     "start": "nwb serve-react-demo",
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=test jest -u --no-cache",
     "test:coverage": "NODE_ENV=test jest --coverage",
     "test:watch": "NODE_ENV=test jest --watch"
   },
