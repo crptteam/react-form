@@ -144,7 +144,7 @@ class Form extends Component {
       this.setState({
         values: {
           ...this.state.values,
-          [name]: multi ? val.slice().map(v => Object.assign({_type: 'MultiSelect'}, v)) : [Object.assign({_type: 'MultiSelect'},val)]
+          [name]: multi ? val.slice().map(v => Object.assign({_type: 'MultiSelect'}, v)) : [Object.assign({_type: 'SingleSelect'},val)]
         }
       });
 
