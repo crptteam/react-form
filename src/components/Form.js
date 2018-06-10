@@ -84,7 +84,7 @@ class Form extends Component {
                   ? child.props.values &&
                     child.props.values.filter(
                       v => child.props.selectedId === v.id
-                    ).map(v => Object.assign({type: 'SingleSelect'}, v))
+                    ).map(v => Object.assign({_type: 'SingleSelect'}, v))
                   : []
             }
           };
@@ -101,7 +101,7 @@ class Form extends Component {
                   ? child.props.values &&
                   child.props.values.filter(
                     v => ~child.props.selectedIds.indexOf(v.id)
-                  ).map(v => Object.assign({type: 'MultiSelect'}, v))
+                  ).map(v => Object.assign({_type: 'MultiSelect'}, v))
                   : []
             }
           };
@@ -114,7 +114,7 @@ class Form extends Component {
           this._tmp = {
             values: {
               ...this._tmp.values,
-              [child.props.name]: child.props.date ? [{ date: child.props.date, type: 'DatePicker' }] : []
+              [child.props.name]: child.props.date ? [{ date: child.props.date, _type: 'DatePicker' }] : []
             }
           };
         }
@@ -127,7 +127,7 @@ class Form extends Component {
             values: {
               ...this._tmp.values,
               [child.props.name]: child.props.from || child.props.to
-                  ? [{ from: child.props.from, to: child.props.to, type: 'RangePicker' }]
+                  ? [{ from: child.props.from, to: child.props.to, _type: 'RangePicker' }]
                   : []
 
             }
@@ -144,7 +144,7 @@ class Form extends Component {
       this.setState({
         values: {
           ...this.state.values,
-          [name]: multi ? val.slice() : [val]
+          [name]: multi ? val.slice().map(v => Object.assign({_type: 'MultiSelect'}, v)) : [Object.assign({_type: 'MultiSelect'},val)]
         }
       });
 
@@ -162,9 +162,10 @@ class Form extends Component {
             double
               ? {
                   to: val.to ? val.to.format('YYYY.MM.DD') : null,
-                  from: val.from ? val.from.format('YYYY.MM.DD') : null
+                  from: val.from ? val.from.format('YYYY.MM.DD') : null,
+                  _type: 'RangePicker'
                 }
-              : { date: val.date ? val.date.format('YYYY.MM.DD') : null }
+              : { date: val.date ? val.date.format('YYYY.MM.DD') : null, _type: 'DatePicker' }
           ]
         }
       });
