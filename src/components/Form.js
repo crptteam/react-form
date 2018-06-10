@@ -84,7 +84,7 @@ class Form extends Component {
                   ? child.props.values &&
                     child.props.values.filter(
                       v => child.props.selectedId === v.id
-                    )
+                    ).map(v => Object.assign({type: 'SingleSelect'}, v))
                   : []
             }
           };
@@ -101,7 +101,7 @@ class Form extends Component {
                   ? child.props.values &&
                   child.props.values.filter(
                     v => ~child.props.selectedIds.indexOf(v.id)
-                  )
+                  ).map(v => Object.assign({type: 'MultiSelect'}, v))
                   : []
             }
           };
@@ -114,7 +114,7 @@ class Form extends Component {
           this._tmp = {
             values: {
               ...this._tmp.values,
-              [child.props.name]: child.props.date ? [{ date: child.props.date }] : []
+              [child.props.name]: child.props.date ? [{ date: child.props.date, type: 'DatePicker' }] : []
             }
           };
         }
@@ -127,7 +127,7 @@ class Form extends Component {
             values: {
               ...this._tmp.values,
               [child.props.name]: child.props.from || child.props.to
-                  ? [{ from: child.props.from, to: child.props.to }]
+                  ? [{ from: child.props.from, to: child.props.to, type: 'RangePicker' }]
                   : []
 
             }
