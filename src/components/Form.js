@@ -62,6 +62,7 @@ class Form extends Component {
     switch (child.type.displayName) {
 
       case 'Input':
+      case 'WithTheme(Input)':
         if (child.props.name) {
           this._tmp = {
             values: {
@@ -76,6 +77,8 @@ class Form extends Component {
         break;
 
       case 'SingleSelect':
+      case 'WithTheme(SingleSelect)':
+
         if (child.props.name) {
           this._tmp = {
             values: {
@@ -93,6 +96,8 @@ class Form extends Component {
         break;
 
       case 'MultiSelect':
+      case 'WithTheme(MultiSelect)':
+
         if (child.props.name) {
           this._tmp = {
             values: {
@@ -110,6 +115,8 @@ class Form extends Component {
         break;
 
       case 'DatePicker':
+      case 'WithTheme(DatePicker)':
+
         if (child.props.name) {
           this._tmp = {
             values: {
@@ -122,6 +129,8 @@ class Form extends Component {
         break;
 
       case 'RangePicker':
+      case 'WithTheme(RangePicker)':
+
         if (child.props.name) {
           this._tmp = {
             values: {
