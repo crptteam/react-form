@@ -214,10 +214,12 @@ class Form extends Component {
 
     switch (child.type.displayName) {
       case 'CollapsibleContent':
+      case 'WithTheme(CollapsibleContent)':
         newProps.visible = this.state.isOpen;
         break;
 
       case 'Button':
+      case 'WithTheme(Button)':
         if (child.props.action) {
           if (child.props.action === 'clear') {
             newProps.onClick = this.clear;
@@ -229,6 +231,7 @@ class Form extends Component {
         break;
 
       case 'Input':
+      case 'WithTheme(Input)':
         if (child.props.name) {
           newProps.onChange = this.onInputChange(
             child.props.name,
@@ -240,6 +243,8 @@ class Form extends Component {
         break;
 
       case 'SingleSelect':
+      case 'WithTheme(SingleSelect)':
+
         if (child.props.name) {
           newProps.onSelect = this.onSelectChange(child.props.name, false, child.props.onSelect);
           newProps.onRef = this.onRef(child.props.name);
@@ -247,6 +252,7 @@ class Form extends Component {
         break;
 
       case 'MultiSelect':
+      case 'WithTheme(MultiSelect)':
         if (child.props.name) {
           newProps.onSelect = this.onSelectChange(child.props.name, true, child.props.onSelect);
           newProps.onRef = this.onRef(child.props.name);
@@ -254,6 +260,7 @@ class Form extends Component {
         break;
 
       case 'DatePicker':
+      case 'WithTheme(DatePicker)':
         if (child.props.name) {
           newProps.onChange = this.onDatePickerChange(child.props.name, false);
           newProps.onRef = this.onRef(child.props.name);
@@ -261,6 +268,8 @@ class Form extends Component {
         break;
 
       case 'RangePicker':
+      case 'WithTheme(RangePicker)':
+
         if (child.props.name) {
           newProps.onChange = this.onDatePickerChange(child.props.name, true);
           newProps.onRef = this.onRef(child.props.name);
