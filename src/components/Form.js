@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-import { recursiveMap, recursiveForEach } from '../utils';
+import { recursiveMap, recursiveForEach } from "../utils";
 
-import FormWrap from '../styled/FormWrap';
+import FormWrap from "../styled/FormWrap";
 
 class Form extends Component {
   form;
@@ -12,7 +12,7 @@ class Form extends Component {
 
   constructor(props) {
     super(props);
-    this.displayName = 'Form';
+    this.displayName = "Form";
 
     this.state = {
       values: {},
@@ -56,13 +56,11 @@ class Form extends Component {
   }
 
   regChildInTmp(child) {
-
     if (!child.type.displayName) return;
 
     switch (child.type.displayName) {
-
-      case 'Input':
-      case 'WithTheme(Input)':
+      case "Input":
+      case "WithTheme(Input)":
         if (child.props.name) {
           this._tmp = {
             values: {
@@ -76,75 +74,78 @@ class Form extends Component {
 
         break;
 
-      case 'SingleSelect':
-      case 'WithTheme(SingleSelect)':
-
+      case "SingleSelect":
+      case "WithTheme(SingleSelect)":
         if (child.props.name) {
           this._tmp = {
             values: {
               ...this._tmp.values,
               [child.props.name]: child.props.selectedId
-                  ? child.props.values &&
-                    child.props.values.filter(
-                      v => child.props.selectedId === v.id
-                    ).map(v => Object.assign({_type: 'SingleSelect'}, v))
-                  : []
+                ? child.props.values &&
+                  child.props.values
+                    .filter(v => child.props.selectedId === v.id)
+                    .map(v => Object.assign({ _type: "SingleSelect" }, v))
+                : []
             }
           };
         }
 
         break;
 
-      case 'MultiSelect':
-      case 'WithTheme(MultiSelect)':
-
+      case "MultiSelect":
+      case "WithTheme(MultiSelect)":
         if (child.props.name) {
           this._tmp = {
             values: {
               ...this._tmp.values,
               [child.props.name]: child.props.selectedIds
-                  ? child.props.values &&
-                  child.props.values.filter(
-                    v => ~child.props.selectedIds.indexOf(v.id)
-                  ).map(v => Object.assign({_type: 'MultiSelect'}, v))
+                ? child.props.values &&
+                  child.props.values
+                    .filter(v => ~child.props.selectedIds.indexOf(v.id))
+                    .map(v => Object.assign({ _type: "MultiSelect" }, v))
+                : []
+            }
+          };
+        }
+
+        break;
+
+      case "DatePicker":
+      case "WithTheme(DatePicker)":
+        if (child.props.name) {
+          this._tmp = {
+            values: {
+              ...this._tmp.values,
+              [child.props.name]: child.props.date
+                ? [{ date: child.props.date, _type: "DatePicker" }]
+                : []
+            }
+          };
+        }
+
+        break;
+
+      case "RangePicker":
+      case "WithTheme(RangePicker)":
+        if (child.props.name) {
+          this._tmp = {
+            values: {
+              ...this._tmp.values,
+              [child.props.name]:
+                child.props.from || child.props.to
+                  ? [
+                      {
+                        from: child.props.from,
+                        to: child.props.to,
+                        _type: "RangePicker"
+                      }
+                    ]
                   : []
             }
           };
         }
 
         break;
-
-      case 'DatePicker':
-      case 'WithTheme(DatePicker)':
-
-        if (child.props.name) {
-          this._tmp = {
-            values: {
-              ...this._tmp.values,
-              [child.props.name]: child.props.date ? [{ date: child.props.date, _type: 'DatePicker' }] : []
-            }
-          };
-        }
-
-        break;
-
-      case 'RangePicker':
-      case 'WithTheme(RangePicker)':
-
-        if (child.props.name) {
-          this._tmp = {
-            values: {
-              ...this._tmp.values,
-              [child.props.name]: child.props.from || child.props.to
-                  ? [{ from: child.props.from, to: child.props.to, _type: 'RangePicker' }]
-                  : []
-
-            }
-          };
-        }
-
-        break;
-
     }
   }
 
@@ -153,12 +154,13 @@ class Form extends Component {
       this.setState({
         values: {
           ...this.state.values,
-          [name]: multi ? val.slice().map(v => Object.assign({_type: 'MultiSelect'}, v)) : [Object.assign({_type: 'SingleSelect'},val)]
+          [name]: multi
+            ? val.slice().map(v => Object.assign({ _type: "MultiSelect" }, v))
+            : [Object.assign({ _type: "SingleSelect" }, val)]
         }
       });
 
       callback ? callback(val) : null;
-
     };
   }
 
@@ -170,11 +172,14 @@ class Form extends Component {
           [name]: [
             double
               ? {
-                  to: val.to ? val.to.format('YYYY.MM.DD') : null,
-                  from: val.from ? val.from.format('YYYY.MM.DD') : null,
-                  _type: 'RangePicker'
+                  to: val.to ? val.to.format("YYYY.MM.DD") : null,
+                  from: val.from ? val.from.format("YYYY.MM.DD") : null,
+                  _type: "RangePicker"
                 }
-              : { date: val.date ? val.date.format('YYYY.MM.DD') : null, _type: 'DatePicker' }
+              : {
+                  date: val.date ? val.date.format("YYYY.MM.DD") : null,
+                  _type: "DatePicker"
+                }
           ]
         }
       });
@@ -182,8 +187,7 @@ class Form extends Component {
   }
 
   toggleCollapsible() {
-
-    console.log('toggle');
+    console.log("toggle");
 
     this.setState({
       isOpen: !this.state.isOpen
@@ -194,7 +198,6 @@ class Form extends Component {
   }
 
   clear() {
-
     const newValues = {};
     for (const key in this.compRefs) {
       this.compRefs[key].clear();
@@ -206,7 +209,6 @@ class Form extends Component {
     });
 
     this.props.onClear && this.props.onClear();
-
   }
 
   onRef(name) {
@@ -222,25 +224,25 @@ class Form extends Component {
     if (!child.type.displayName) return {};
 
     switch (child.type.displayName) {
-      case 'CollapsibleContent':
-      case 'WithTheme(CollapsibleContent)':
+      case "CollapsibleContent":
+      case "WithTheme(CollapsibleContent)":
         newProps.visible = this.state.isOpen;
         break;
 
-      case 'Button':
-      case 'WithTheme(Button)':
+      case "Button":
+      case "WithTheme(Button)":
         if (child.props.action) {
-          if (child.props.action === 'clear') {
+          if (child.props.action === "clear") {
             newProps.onClick = this.clear;
           }
-          if (child.props.action === 'collapse') {
+          if (child.props.action === "collapse") {
             newProps.onClick = this.toggleCollapsible;
           }
         }
         break;
 
-      case 'Input':
-      case 'WithTheme(Input)':
+      case "Input":
+      case "WithTheme(Input)":
         if (child.props.name) {
           newProps.onChange = this.onInputChange(
             child.props.name,
@@ -251,34 +253,40 @@ class Form extends Component {
 
         break;
 
-      case 'SingleSelect':
-      case 'WithTheme(SingleSelect)':
-
+      case "SingleSelect":
+      case "WithTheme(SingleSelect)":
         if (child.props.name) {
-          newProps.onSelect = this.onSelectChange(child.props.name, false, child.props.onSelect);
+          newProps.onSelect = this.onSelectChange(
+            child.props.name,
+            false,
+            child.props.onSelect
+          );
           newProps.onRef = this.onRef(child.props.name);
         }
         break;
 
-      case 'MultiSelect':
-      case 'WithTheme(MultiSelect)':
+      case "MultiSelect":
+      case "WithTheme(MultiSelect)":
         if (child.props.name) {
-          newProps.onSelect = this.onSelectChange(child.props.name, true, child.props.onSelect);
+          newProps.onSelect = this.onSelectChange(
+            child.props.name,
+            true,
+            child.props.onSelect
+          );
           newProps.onRef = this.onRef(child.props.name);
         }
         break;
 
-      case 'DatePicker':
-      case 'WithTheme(DatePicker)':
+      case "DatePicker":
+      case "WithTheme(DatePicker)":
         if (child.props.name) {
           newProps.onChange = this.onDatePickerChange(child.props.name, false);
           newProps.onRef = this.onRef(child.props.name);
         }
         break;
 
-      case 'RangePicker':
-      case 'WithTheme(RangePicker)':
-
+      case "RangePicker":
+      case "WithTheme(RangePicker)":
         if (child.props.name) {
           newProps.onChange = this.onDatePickerChange(child.props.name, true);
           newProps.onRef = this.onRef(child.props.name);
@@ -299,13 +307,13 @@ class Form extends Component {
       React.cloneElement(child, this.getNewPropsByChild(child))
     );
 
-
-
     return (
-      <FormWrap onSubmit={this.onSubmit} innerRef={el => {
-        (this.form = el);
-        if (this.props.innerRef) this.props.innerRef(el);
-      }}>
+      <FormWrap
+        onSubmit={this.onSubmit}
+        innerRef={el => {
+          this.form = el;
+        }}
+      >
         {childrenWithProps}
       </FormWrap>
     );
@@ -317,7 +325,6 @@ Form.propTypes = {
   onSubmit: PropTypes.func,
   onCollapse: PropTypes.func,
   onClear: PropTypes.func,
-  innerRef: PropTypes.func,
 };
 
 Form.defaultProps = {};
