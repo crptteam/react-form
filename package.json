@@ -1,6 +1,6 @@
 {
   "name": "@crpt/react-form",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "react-form React component",
   "main": "lib/index.js",
   "module": "es/index.js",
