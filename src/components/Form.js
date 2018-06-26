@@ -299,8 +299,13 @@ class Form extends Component {
       React.cloneElement(child, this.getNewPropsByChild(child))
     );
 
+
+
     return (
-      <FormWrap onSubmit={this.onSubmit} innerRef={el => (this.form = el)}>
+      <FormWrap onSubmit={this.onSubmit} innerRef={el => {
+        (this.form = el);
+        if (this.props.innerRef) this.props.innerRef(el);
+      }}>
         {childrenWithProps}
       </FormWrap>
     );
@@ -312,6 +317,7 @@ Form.propTypes = {
   onSubmit: PropTypes.func,
   onCollapse: PropTypes.func,
   onClear: PropTypes.func,
+  innerRef: PropTypes.func,
 };
 
 Form.defaultProps = {};
