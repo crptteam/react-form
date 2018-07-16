@@ -45,12 +45,28 @@ class Form extends Component {
 
   onInputChange(name, onChange) {
     return val => {
-      this.setState({
-        values: {
-          ...this.state.values,
-          [name]: [val]
-        }
-      });
+      if (/,/.test(name)) {
+        const arrNames = str.split(",");
+        const aliasNames = arrNames.reduce((acc, el) => {
+          acc[el] = [val];
+          return acc;
+        }, {});
+
+        this.setState({
+          values: {
+            ...this.state.values,
+            ...aliasNames
+          }
+        });
+      } else {
+        this.setState({
+          values: {
+            ...this.state.values,
+            [name]: [val]
+          }
+        });
+      }
+
       onChange && onChange(val);
     };
   }
@@ -324,7 +340,7 @@ Form.propTypes = {
   className: PropTypes.string,
   onSubmit: PropTypes.func,
   onCollapse: PropTypes.func,
-  onClear: PropTypes.func,
+  onClear: PropTypes.func
 };
 
 Form.defaultProps = {};
