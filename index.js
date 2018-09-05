@@ -1,5 +1,3 @@
-import { Form, FormLine, CollapsibleContent } from './src';
+import { Input } from './src/';
 
-export { Form, FormLine, CollapsibleContent };
-
-export default Form;
+export { Input };

@@ -1,5 +1,6 @@
-import Form from './components/Form';
-import FormLine from './components/FormLine';
-import CollapsibleContent from './components/CollapsibleContent';
+import { Form, Field } from './components';
 
-export { Form, FormLine, CollapsibleContent };
+export {
+  Form,
+  Field,
+};
