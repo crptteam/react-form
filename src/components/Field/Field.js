@@ -23,7 +23,7 @@ class Field extends React.Component {
     });
 
     const { name, onFieldMount } = componentProps;
-    onFieldMount(name, children);
+    if (name) onFieldMount(name, children);
   }
 
   render() {
@@ -31,11 +31,12 @@ class Field extends React.Component {
 
     const ElementType = getElementType(componentProps);
 
-    const { name, getOnChange, onChange } = componentProps;
+    const { name, getOnChange, onChange, onFieldMount, ...passProps } = componentProps;
 
     return (
         <ElementType
-          {...componentProps}
+          name={name}
+          {...passProps}
           onChange={getOnChange(name, onChange)}
         />
     );

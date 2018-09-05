@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { curry, set, isArray } from 'lodash';
+import { curry, set, isArray, map } from 'lodash';
 
 import {
   getComponentProps,
   getElementType,
   getChildren,
+  getPropWith,
 } from '@crpt/react-utils';
 
 import {
@@ -13,13 +14,14 @@ import {
   FormDefaultProps,
 } from './Form.types';
 
+import { Field } from '../index';
 import { FormContext } from '../../constants';
 
 class Form extends React.Component {
   data = {};
 
   onChange = (name, callback, event) => {
-    set(this.data, name, event.target.value);
+    if (name) set(this.data, name, event.target.value);
     if (callback) callback(name, event);
   };
 
@@ -46,18 +48,22 @@ class Form extends React.Component {
 
     const ElementType = getElementType(componentProps);
 
-    const children = getChildren(componentProps, {
-      shorthand: ['children']
-    });
+    const scheme = getPropWith(componentProps, 'scheme');
 
-    if (isArray(children)) {
-      console.log(children);
+    let children = getChildren(componentProps);
+
+    if (scheme) {
+      children = map(scheme.fields, (props) => <Field {...props} />);
     }
+
+    const preparedChildren = isArray(children)
+      ? map(children, (item, index) => React.cloneElement(item, { key: item.key ? item.key : index }))
+      : children;
 
     return (
       <ElementType {...componentProps} onSubmit={this.onSubmit}>
         <FormContext.Provider value={this.callbacks}>
-          {children}
+          {preparedChildren}
         </FormContext.Provider>
       </ElementType>
     );
