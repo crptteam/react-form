@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { curry, set, isArray, map } from 'lodash';
+import { curry, set, isArray, map, isEqual } from 'lodash';
 
 import {
   getComponentProps,
@@ -20,6 +20,10 @@ import { FormContext } from '../../constants';
 class Form extends React.Component {
   data = {};
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return !(isEqual(nextProps, this.props));
+  }
+
   onChange = (name, callback, event) => {
     if (name) set(this.data, name, event.target.value);
     if (callback) callback(name, event);
@@ -34,30 +38,34 @@ class Form extends React.Component {
     const { onSubmit } = componentProps;
 
     e.preventDefault();
-    onSubmit && onSubmit(this.data);
+    if (onSubmit) onSubmit(this.data);
   };
 
   callbacks = {
-    getOnChange: (name, callback) => curry(this.onChange)(name, callback),
+    curryOnChange: (name, callback) => curry(this.onChange, 3)(name, callback),
     onFieldMount: this.onFieldMount,
   };
-
 
   render() {
     const componentProps = getComponentProps(Form, this.props);
 
     const ElementType = getElementType(componentProps);
 
-    const scheme = getPropWith(componentProps, 'scheme');
+    let children = null;
 
-    let children = getChildren(componentProps);
+    const data = getPropWith(componentProps, 'data');
 
-    if (scheme) {
-      children = map(scheme.fields, (props) => <Field {...props} />);
+    if (data) {
+      children = map(data.fields, props => <Field {...props} />);
+    } else {
+      children = getChildren(componentProps, { updateProps: false });
     }
 
     const preparedChildren = isArray(children)
-      ? map(children, (item, index) => React.cloneElement(item, { key: item.key ? item.key : index }))
+      ? map(children, (item, index) => {
+        const key = item.key ? item.key : item.props.name;
+        return React.cloneElement(item, { key: key || index });
+      })
       : children;
 
     return (
@@ -67,7 +75,6 @@ class Form extends React.Component {
         </FormContext.Provider>
       </ElementType>
     );
-
   }
 }
 

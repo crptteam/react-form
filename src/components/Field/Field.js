@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { isEqual } from 'lodash';
+
 import {
   getComponentProps,
   getElementType,
@@ -11,7 +13,7 @@ import {
   FieldDefaultProps,
 } from './Field.types';
 
-import { FormContext } from '../../constants';
+import { withConsumer } from '../../constants';
 
 class Field extends React.Component {
   componentDidMount() {
@@ -31,14 +33,14 @@ class Field extends React.Component {
 
     const ElementType = getElementType(componentProps);
 
-    const { name, getOnChange, onChange, onFieldMount, ...passProps } = componentProps;
+    const { name, curryOnChange, onChange, onFieldMount, ...passProps } = componentProps;
 
     return (
-        <ElementType
-          name={name}
-          {...passProps}
-          onChange={getOnChange(name, onChange)}
-        />
+      <ElementType
+        name={name}
+        {...passProps}
+        onChange={curryOnChange(name, onChange)}
+      />
     );
   }
 }
@@ -49,15 +51,4 @@ Field.propTypes = FieldPropTypes;
 
 Field.defaultProps = FieldDefaultProps;
 
-export default React.forwardRef((props, ref) => (
-  <FormContext.Consumer>
-    {({getOnChange, onFieldMount}) => (
-      <Field
-        getOnChange={getOnChange}
-        onFieldMount={onFieldMount}
-        {...props}
-        ref={ref}
-      />
-    )}
-  </FormContext.Consumer>
-));
+export default withConsumer(Field);
