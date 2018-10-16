@@ -59,6 +59,17 @@ class Form extends Component {
     if (!child.type.displayName) return;
 
     switch (child.type.displayName) {
+
+      case "MRPFromToSelect":
+        this._tmp = {
+          values: {
+            ...this._tmp.values,
+            mrpFrom: [],
+            mrpTo: []
+          }
+        };
+        break;
+
       case "Input":
       case "WithTheme(Input)":
         if (child.props.name) {
@@ -221,9 +232,20 @@ class Form extends Component {
   getNewPropsByChild(child) {
     const newProps = {};
 
-    if (!child.type.displayName) return {};
+    if (child.type.displayName === "MRPFromToSelect") {
+      console.log("CHILD", child, child.props.children, child.type.displayName);
+    }
+
+    if (!child.type.displayName) return newProps;
 
     switch (child.type.displayName) {
+      case "MRPFromToSelect":
+        newProps.onMrpFromChange = this.onInputChange("mrpFrom");
+        newProps.onMrpFromRef = this.onRef("mrpFrom");
+        newProps.onMrpToChange = this.onInputChange("mrpTo");
+        newProps.onMrpToRef = this.onRef("mrpTo");
+        break;
+
       case "CollapsibleContent":
       case "WithTheme(CollapsibleContent)":
         newProps.visible = this.state.isOpen;
@@ -243,6 +265,7 @@ class Form extends Component {
 
       case "Input":
       case "WithTheme(Input)":
+        //console.log('child.props input', child.props);
         if (child.props.name) {
           newProps.onChange = this.onInputChange(
             child.props.name,
@@ -324,7 +347,7 @@ Form.propTypes = {
   className: PropTypes.string,
   onSubmit: PropTypes.func,
   onCollapse: PropTypes.func,
-  onClear: PropTypes.func,
+  onClear: PropTypes.func
 };
 
 Form.defaultProps = {};
