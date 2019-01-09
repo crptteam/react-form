@@ -51,18 +51,9 @@ class Form extends Component {
           [name]: [val]
         };
 
-        console.log("onInputChange new values", values);
-
-        this.setState(
-          {
-            values
-          },
-          () => {
-            console.log("After state", this.state.values);
-          }
-        );
-
-        console.log("wtf??? onInputChange", val, name);
+        this.setState({
+          values
+        });
 
         onChange && onChange(val);
       }, 0);
@@ -215,7 +206,6 @@ class Form extends Component {
   }
 
   toggleCollapsible() {
-    console.log("toggle");
 
     this.setState({
       isOpen: !this.state.isOpen
@@ -250,7 +240,6 @@ class Form extends Component {
     const newProps = {};
 
     if (child.type.displayName === "MRPFromToSelect") {
-      console.log("CHILD", child, child.props.children, child.type.displayName);
     }
 
     if (!child.type.displayName) return newProps;
@@ -338,7 +327,6 @@ class Form extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log("Form on onSubmit", this.state.values);
     this.props.onSubmit && this.props.onSubmit(this.state.values);
   }
 
