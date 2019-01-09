@@ -45,13 +45,27 @@ class Form extends Component {
 
   onInputChange(name, onChange) {
     return val => {
-      this.setState({
-        values: {
+      setTimeout(() => {
+        const values = {
           ...this.state.values,
           [name]: [val]
-        }
-      });
-      onChange && onChange(val);
+        };
+
+        console.log("onInputChange new values", values);
+
+        this.setState(
+          {
+            values
+          },
+          () => {
+            console.log("After state", this.state.values);
+          }
+        );
+
+        console.log("wtf??? onInputChange", val, name);
+
+        onChange && onChange(val);
+      }, 0);
     };
   }
 
@@ -59,7 +73,6 @@ class Form extends Component {
     if (!child.type.displayName) return;
 
     switch (child.type.displayName) {
-
       case "MRPFromToSelect":
         this._tmp = {
           values: {
@@ -162,38 +175,42 @@ class Form extends Component {
 
   onSelectChange(name, multi, callback) {
     return val => {
-      this.setState({
-        values: {
-          ...this.state.values,
-          [name]: multi
-            ? val.slice().map(v => Object.assign({ _type: "MultiSelect" }, v))
-            : [Object.assign({ _type: "SingleSelect" }, val)]
-        }
-      });
+      setTimeout(() => {
+        this.setState({
+          values: {
+            ...this.state.values,
+            [name]: multi
+              ? val.slice().map(v => Object.assign({ _type: "MultiSelect" }, v))
+              : [Object.assign({ _type: "SingleSelect" }, val)]
+          }
+        });
 
-      callback ? callback(val) : null;
+        callback ? callback(val) : null;
+      }, 0);
     };
   }
 
   onDatePickerChange(name, double) {
     return val => {
-      this.setState({
-        values: {
-          ...this.state.values,
-          [name]: [
-            double
-              ? {
-                  to: val.to ? val.to.format("YYYY.MM.DD") : null,
-                  from: val.from ? val.from.format("YYYY.MM.DD") : null,
-                  _type: "RangePicker"
-                }
-              : {
-                  date: val.date ? val.date.format("YYYY.MM.DD") : null,
-                  _type: "DatePicker"
-                }
-          ]
-        }
-      });
+      setTimeout(() => {
+        this.setState({
+          values: {
+            ...this.state.values,
+            [name]: [
+              double
+                ? {
+                    to: val.to ? val.to.format("YYYY.MM.DD") : null,
+                    from: val.from ? val.from.format("YYYY.MM.DD") : null,
+                    _type: "RangePicker"
+                  }
+                : {
+                    date: val.date ? val.date.format("YYYY.MM.DD") : null,
+                    _type: "DatePicker"
+                  }
+            ]
+          }
+        });
+      }, 0);
     };
   }
 
@@ -265,7 +282,6 @@ class Form extends Component {
 
       case "Input":
       case "WithTheme(Input)":
-        //console.log('child.props input', child.props);
         if (child.props.name) {
           newProps.onChange = this.onInputChange(
             child.props.name,
@@ -322,6 +338,7 @@ class Form extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    console.log("Form on onSubmit", this.state.values);
     this.props.onSubmit && this.props.onSubmit(this.state.values);
   }
 
