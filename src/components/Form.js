@@ -218,8 +218,8 @@ class Form extends Component {
   clear() {
     const newValues = {};
     for (const key in this.compRefs) {
-      this.compRefs[key].clear();
-      newValues[key] = [];
+      const value = this.compRefs[key].clear();
+      newValues[key] = value ? [{...value, }] : [];
     }
 
     this.setState({
