@@ -184,6 +184,7 @@ class Form extends Component {
   onDatePickerChange(name, double) {
     return val => {
       setTimeout(() => {
+
         this.setState({
           values: {
             ...this.state.values,
